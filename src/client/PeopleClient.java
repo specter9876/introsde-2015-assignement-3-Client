@@ -83,6 +83,17 @@ public class PeopleClient{
         Person newperson=new Person();
         newperson.setName("Kristian");
         newperson.setLastname("Segnana");//add more stuff
+        
+       /* LifeStatus lftosave1=new LifeStatus();
+        MeasureDefinition mdef1=new MeasureDefinition();
+        mdef1.setMeasureName("weight");
+        mdef1.setIdMeasureDef(1);
+        mdef1.setMeasureType("double");
+        lftosave1.setMeasureDefinition(mdef1);
+        lftosave1.setValue("100");
+        List<LifeStatus> listlf=new ArrayList <LifeStatus>();
+        listlf.add(lftosave1);
+        newperson.setLifeStatus(listlf);*/
         Person personcreate=people.createPerson(newperson);
         int id=personcreate.getIdPerson();
         
