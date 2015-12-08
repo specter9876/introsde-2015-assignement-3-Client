@@ -28,6 +28,7 @@ public class PeopleClient{
 		
 		
         System.out.println("///////////////////////METHOD#1//////////////////////////");
+        System.out.println("readPersonList()");
         List<Person> plist = people.readPersonList();
         for(Person person: plist){
         	
@@ -47,6 +48,7 @@ public class PeopleClient{
         
         ////Method #2 ReadPerson()
         System.out.println("///////////////////////METHOD#2//////////////////////////");
+        System.out.println(" readPerson(Long id) with id: "+1);
         
         Person p = people.readPerson(1L);
         try {
@@ -61,6 +63,7 @@ public class PeopleClient{
         
         /////Method #3 updatePerson()
         System.out.println("///////////////////////METHOD#3//////////////////////////");
+        System.out.println("updatePerson(Person p) change name of person with id: "+1+" to: name changed");
         
         p.setName("name changed");
         Person updateperson= people.updatePerson(p);
@@ -76,26 +79,40 @@ public class PeopleClient{
 		}
         
         
+        ////Method #2 ReadPerson()
+        System.out.println("///////////////////////METHOD#2//////////////////////////");
+        System.out.println(" readPerson(Long id) with id: "+1);
+        
+        Person p1 = people.readPerson(1L);
+        try {
+			JAXBElement<Person> personfinal = new JAXBElement<Person>(new QName(
+                                                                                "http://soap.assignment.introsde/", "person"),
+                                                                      Person.class, p1);
+			m.marshal(personfinal, System.out);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("error");
+		}
         
         
         /////Method #4 createPerson()
         System.out.println("///////////////////////METHOD#4//////////////////////////");
+        System.out.println("createPerson(Person p) create new person with some of my information");
         Person newperson=new Person();
         newperson.setName("Kristian");
         newperson.setLastname("Segnana");//add more stuff
         
-       /* LifeStatus lftosave1=new LifeStatus();
-        MeasureDefinition mdef1=new MeasureDefinition();
-        mdef1.setMeasureName("weight");
-        mdef1.setIdMeasureDef(1);
-        mdef1.setMeasureType("double");
-        lftosave1.setMeasureDefinition(mdef1);
-        lftosave1.setValue("100");
-        List<LifeStatus> listlf=new ArrayList <LifeStatus>();
-        listlf.add(lftosave1);
-        newperson.setLifeStatus(listlf);*/
+       
         Person personcreate=people.createPerson(newperson);
+        
+        LifeStatus temp=null;
+       
+
         int id=personcreate.getIdPerson();
+        LifeStatus newlife= people.savePersonMeasure(new Long(id),temp);
+        System.out.println("create new person with id: "+id);
+        
+        personcreate=people.readPerson(new Long(id));
         
         try {
 			JAXBElement<Person> personfinal = new JAXBElement<Person>(new QName(
@@ -109,8 +126,10 @@ public class PeopleClient{
         
         
         
+        
         ////Method #5 deletePerson()
         System.out.println("///////////////////////METHOD#5//////////////////////////");
+        System.out.println("deletePerson(Long id) delete me my id: "+id);
          Long id2=new Long(id);
          int op= people.deletePerson(id2);
          if(op==0){
@@ -123,7 +142,7 @@ public class PeopleClient{
         
         /////Method #6 readPersonHistory()
         System.out.println("///////////////////////METHOD#6//////////////////////////");
-        
+        System.out.println("readPersonHistory(Long id, String measureType) for id: "+1 +"and measuretype: weight");
         List<HealthMeasureHistory> healthmeasurehistorylist =people.readPersonHistory(1L, "weight");
         for(HealthMeasureHistory measurehistory: healthmeasurehistorylist){
         	
@@ -140,6 +159,7 @@ public class PeopleClient{
         
         ////Method #7 ReadMeasureTypes()
         System.out.println("///////////////////////METHOD#7//////////////////////////");
+        System.out.println("readMeasureTypes()");
         List <MeasureDefinition> measurelist= new ArrayList <MeasureDefinition> (people.readMeasureTypes());
         for(MeasureDefinition measure: measurelist){
         	try {
@@ -154,6 +174,7 @@ public class PeopleClient{
        
         ////Method #8 readPersonMeasure()
         System.out.println("///////////////////////METHOD#8//////////////////////////");
+        System.out.println("readPersonMeasure(Long id, String measureType, Long mid) for id: 1 measuretype: weight and mid: 1");
         
         HealthMeasureHistory hm=people.readPersonMeasure(1L, "weight", 1L);
         try {
@@ -162,8 +183,7 @@ public class PeopleClient{
         } catch (Exception e) {
         	e.printStackTrace();
         	System.out.println("error");
-        }	
-	
+        }
 	
         
        
@@ -172,14 +192,14 @@ public class PeopleClient{
         
         ////////Method #9 savePersonMeasure()
         System.out.println("///////////////////////METHOD#9//////////////////////////");
-        
+        System.out.println("savePersonMeasure(Long id, Measure m) for id: 1 and measure: 10000, weight");
         LifeStatus lftosave=new LifeStatus();
         MeasureDefinition mdef=new MeasureDefinition();
         mdef.setMeasureName("weight");
         mdef.setIdMeasureDef(1);
         mdef.setMeasureType("double");
         lftosave.setMeasureDefinition(mdef);
-        lftosave.setValue("100");
+        lftosave.setValue("10000");
         //lftosave.se;
         
         LifeStatus lf= people.savePersonMeasure(1L, lftosave);
@@ -195,6 +215,7 @@ public class PeopleClient{
         
         ///////Method #10 updatePersonMeasure()
         System.out.println("///////////////////////METHOD#10//////////////////////////");
+        System.out.println("updatePersonMeasure(Long id, Measure m) for id: 1 and measure: 9999, weight");
         
        HealthMeasureHistory hmh=people.readPersonMeasure(1L, "weight", 1L);
        hmh.setValue("9999");
@@ -209,7 +230,7 @@ public class PeopleClient{
        } catch (Exception e) {
     	   e.printStackTrace();
     	   System.out.println("error");
-       }	
+       }
        System.out.println("//////////////END OF CLIENT//////////////////");
     }
 }
